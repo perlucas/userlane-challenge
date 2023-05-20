@@ -5,9 +5,10 @@ export interface Task {
 export interface CommandOptions {
     depth: number,
     mainUrl: string,
-    format: string,
-    headerTag: string | null,
-    words: string[]
+    outputFormat: string,
+    scanHeaderTagOnly: string | null,
+    matchingWords: string[],
+    scanDomainOnly: string | null
 }
 
 export interface ResultByUrl {

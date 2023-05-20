@@ -1,5 +1,6 @@
 import { CommandOptions, CommandResult, Task, TaskContainer } from "./types";
 import { buildDOMFromUrl } from './dom'
+import { isValidUrl } from "./utils";
 
 export class CrawlerTask implements Task {
     constructor(
@@ -13,7 +14,7 @@ export class CrawlerTask implements Task {
         const findings = this.findWords(document, options)
         result.addFindings(this.url, findings)
 
-        const urlsToVisit = this.findLinks(document)
+        const urlsToVisit = this.findLinks(document, options)
         for (const url of urlsToVisit) {
             this.taskContainer.addTask(
                 new CrawlerTask(url, this.taskContainer)
@@ -22,12 +23,12 @@ export class CrawlerTask implements Task {
     }
 
     private findWords(document: Document, options: CommandOptions): string[] {
-        const { headerTag, words } = options
-
         const headerNodes: Element[] = []
 
-        if (headerTag) {
-            document.querySelectorAll(`${headerTag}`)
+        const { scanHeaderTagOnly, matchingWords } = options
+
+        if (scanHeaderTagOnly) {
+            document.querySelectorAll(`${scanHeaderTagOnly}`)
                 .forEach(n => headerNodes.push(n))
         } else {
             ['h1', 'h2', 'h3', 'h4', 'h5', 'h6']
@@ -40,15 +41,17 @@ export class CrawlerTask implements Task {
         const findings = headerNodes
             .map(hn => hn.textContent || '')
             .filter(text => {
-                return words.length === 0 ||
-                    words.some(w => text?.includes(w))
+                return matchingWords.length === 0 ||
+                    matchingWords.some(w => text?.includes(w))
             })
 
         return findings
     }
 
-    private findLinks(document: Document): string[] {
+    private findLinks(document: Document, options: CommandOptions): string[] {
         const result: string[] = []
+
+        const { scanDomainOnly } = options
 
         document.querySelectorAll('a')
             .forEach(anchor => result.push(anchor.href))
@@ -57,5 +60,9 @@ export class CrawlerTask implements Task {
             url !== undefined &&
             url !== ''
         )
+            .filter(url => scanDomainOnly === null ||
+                url.startsWith(scanDomainOnly)
+            )
+            .filter(isValidUrl)
     }
 }

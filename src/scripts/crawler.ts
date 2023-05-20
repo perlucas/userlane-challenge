@@ -1,7 +1,7 @@
 import commandLineArgs, { OptionDefinition } from 'command-line-args'
 import Schema from 'validate'
 import { runCrawler } from '../crawler'
-import { CommandOptions } from '../crawler/types'
+import { isValidUrl } from '../crawler/utils'
 
 const validators = {
     url: (aUrl: string | null) => {
@@ -9,12 +9,7 @@ const validators = {
             return true
         }
 
-        try {
-            new URL(aUrl)
-            return true
-        } catch (err) {
-            return false
-        }
+        return isValidUrl(aUrl)
     },
 
     headerTag: (tag: string | null) => tag === null || ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].includes(tag),
@@ -73,10 +68,11 @@ const run = async () => {
     }
     const result = await runCrawler({
         depth: options.depth,
-        format: options.format,
-        headerTag: options.headerTag,
+        outputFormat: options.format,
+        scanHeaderTagOnly: options.headerTag,
         mainUrl: options.url,
-        words: options.words
+        matchingWords: options.words,
+        scanDomainOnly: options.domain
     })
 
     return result

@@ -23,6 +23,6 @@ export const runCrawler = async (options: CommandOptions): Promise<string> => {
         depth--
     }
 
-    return buildFormatter(options.format)
+    return buildFormatter(options.outputFormat)
         .format(result)
 }
