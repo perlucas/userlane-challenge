@@ -211,4 +211,18 @@ describe('run Crawler tests', () => {
         expect(JSON.parse(output)).toEqual(expectedOutput)
     })
 
+    test('should format result as CSV', async () => {
+        const expectedOutput = `url,text
+http://test1.com/,Test1 - H1
+http://test1.com/,Test1 - H2
+http://test1.com/,Test1 - H3
+http://test1.com/,Test1 - H4`
+
+        const output = await runCrawler({
+            ...defaultConfig,
+            outputFormat: 'csv'
+        })
+
+        expect(output).toEqual(expectedOutput)
+    })
 })

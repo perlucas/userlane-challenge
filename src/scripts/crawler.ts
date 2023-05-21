@@ -123,7 +123,7 @@ const run = async () => {
     const errors = optionsSchema.validate({ ...options })
 
     if (errors.length > 0) {
-        throw new Error()
+        throw new Error('validation error')
     }
     const result = await runCrawler({
         depth: options.depth,
