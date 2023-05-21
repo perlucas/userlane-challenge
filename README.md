@@ -2,9 +2,9 @@ https://gist.github.com/adriandulic/688447e4b08151dce8eeff4554c2b901
 
 
 TODO:
-- document usage
 - document approach
 - unit tests
+- add CSV format
 
 
 Improvements:

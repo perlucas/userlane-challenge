@@ -2,6 +2,7 @@ import commandLineArgs, { OptionDefinition } from 'command-line-args'
 import Schema from 'validate'
 import { runCrawler } from '../crawler'
 import { isValidUrl } from '../crawler/utils'
+import commandLineUsage, { Section } from 'command-line-usage'
 
 const validators = {
     url: (aUrl: string | null) => {
@@ -57,6 +58,64 @@ const optionsSchema = new Schema({
     }
 })
 
+const usageInstructions = () => {
+    const sections: Section[] = [
+        {
+            header: 'Text Web Crawler',
+            content: 'Web Crawler for header tags scanning'
+        },
+        {
+            header: 'Options',
+            optionList: [
+                {
+                    name: 'url',
+                    description: 'Main website URL',
+                    alias: 'u',
+                    typeLabel: '{underline site url}',
+                    type: String
+                },
+                {
+                    name: 'format',
+                    alias: 'f',
+                    description: 'Output format',
+                    type: String,
+                    defaultValue: 'json',
+                    typeLabel: '{underline json|csv}'
+                },
+                {
+                    name: 'depth',
+                    description: 'How deep should the crawling go',
+                    type: Number,
+                    defaultValue: 0,
+                    alias: 'd',
+                    typeLabel: '{underline n}'
+                },
+                {
+                    name: 'headerTag',
+                    description: 'Scan only this header tags',
+                    type: String,
+                    typeLabel: '{underline tag}'
+                },
+                {
+                    name: 'domain',
+                    description: 'Scan only this domain\'s links recursively',
+                    type: String,
+                    typeLabel: '{underline url}'
+                },
+                {
+                    name: 'words',
+                    description: 'Filter only results containing these words',
+                    multiple: true,
+                    type: String,
+                    typeLabel: '{underline word} ...'
+                }
+            ]
+        },
+    ]
+
+    return commandLineUsage(sections)
+}
+
 const run = async () => {
 
     const options = commandLineArgs(optionDefinitions)
@@ -84,6 +143,7 @@ run()
     })
     .catch(err => {
         console.log('An error occurred when running this command, check the provided arguments')
-        console.error(err)
+        // console.error(err)
+        console.log(usageInstructions())
     })
     .finally(process.exit)

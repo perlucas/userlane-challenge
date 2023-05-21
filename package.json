@@ -12,6 +12,7 @@
   "description": "",
   "devDependencies": {
     "@types/command-line-args": "^5.2.0",
+    "@types/command-line-usage": "^5.0.2",
     "@types/jest": "^29.5.1",
     "@types/jsdom": "^21.1.1",
     "@types/node": "^20.2.1",
@@ -22,6 +23,7 @@
   },
   "dependencies": {
     "command-line-args": "^5.2.1",
+    "command-line-usage": "^7.0.1",
     "jsdom": "^22.0.0",
     "validate": "^5.2.0"
   }
