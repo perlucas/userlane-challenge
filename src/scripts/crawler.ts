@@ -143,7 +143,7 @@ run()
     })
     .catch(err => {
         console.log('An error occurred when running this command, check the provided arguments')
-        // console.error(err)
+        console.error(err)
         console.log(usageInstructions())
     })
     .finally(process.exit)
